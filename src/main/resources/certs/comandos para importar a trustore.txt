@@ -1,0 +1,5 @@
+d:
+cd D:\Desarrollo\Personal\Java\servicioEFacturaFuncional\src\main\resources\certs
+keytool -importcert -keystore truststore.jks -storetype PKCS12 -storepass 123456 -file root.crt -alias dgi-root-ca
+keytool -importcert -keystore truststore.jks -storetype PKCS12 -storepass 123456 -file intermediate.crt -alias dgi-intermediate-ca
+keytool -importcert -keystore truststore.jks -storetype PKCS12 -storepass 123456 -file server.crt -alias dgi-server-cert

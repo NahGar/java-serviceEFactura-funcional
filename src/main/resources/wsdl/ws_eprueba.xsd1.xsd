@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://dgi.gub.uy"
+        xmlns="http://dgi.gub.uy"
+        xmlns:tns="http://dgi.gub.uy"
+        elementFormDefault="qualified">
+
+    <xsd:complexType name="Data">
+        <xsd:all>
+            <xsd:element name="xmlData" type="xsd:string"> </xsd:element>
+        </xsd:all>
+    </xsd:complexType>
+
+    <xsd:element name="WS_eFactura.EFACRECEPCIONSOBRE">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element minOccurs="1" maxOccurs="1" name="Datain" type="tns:Data"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="WS_eFactura.EFACRECEPCIONSOBREResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element minOccurs="1" maxOccurs="1" name="Dataout" type="tns:Data"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="WS_eFactura.EFACRECEPCIONREPORTE">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element minOccurs="1" maxOccurs="1" name="Datain" type="tns:Data"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="WS_eFactura.EFACRECEPCIONREPORTEResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element minOccurs="1" maxOccurs="1" name="Dataout" type="tns:Data"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="WS_eFactura.EFACCONSULTARESTADOENVIO">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element minOccurs="1" maxOccurs="1" name="Datain" type="tns:Data"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="WS_eFactura.EFACCONSULTARESTADOENVIOResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element minOccurs="1" maxOccurs="1" name="Dataout" type="tns:Data"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

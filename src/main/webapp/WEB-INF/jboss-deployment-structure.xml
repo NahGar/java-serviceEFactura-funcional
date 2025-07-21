@@ -1,0 +1,9 @@
+<jboss-deployment-structure>
+    <deployment>
+        <!-- Eliminar la exclusión y dependencia incorrecta -->
+        <dependencies>
+            <!-- Usar el módulo estándar de Jakarta Web Services en WildFly 26+ -->
+            <module name="jakarta.jws.api"/>
+        </dependencies>
+    </deployment>
+</jboss-deployment-structure>

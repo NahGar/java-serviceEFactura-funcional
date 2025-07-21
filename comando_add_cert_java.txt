@@ -1,0 +1,19 @@
+keytool -import -trustcacerts -alias dgi-test-cert ^
+ -file D:\Desarrollo\Personal\Java\serviceEFactura\RUC219999830019_Prueba_CEDE_2016_2017.pem ^
+ -keystore "D:\Desarrollo\Personal\Java\jdk-22.0.2\lib\security\cacerts" ^
+ -storepass 1234
+
+keytool -import -trustcacerts -alias correo-uruguayo-root-ca ^
+ -file "D:\Desarrollo\Personal\Java\serviceEFactura\CorreoUruguayoRootCA.crt" ^
+ -keystore "D:\Desarrollo\Personal\Java\jdk-22.0.2\lib\security\cacerts" ^
+ -storepass 1234
+
+
+--segunda generacion
+keytool -importcert -alias dgi-test-cert -file D:\Java\Proyectos\servicioEFactura\RUC219999830019_Prueba_CEDE_2016_2017.pem -keystore "D:\Java\Proyectos\servicioEFactura\keystore2.jks" -storepass 1234
+
+keytool -importcert -alias dgi-test-cert -file D:\Java\Proyectos\servicioEFactura\CorreoUruguayoRootCA.crt -keystore "D:\Java\Proyectos\servicioEFactura\keystore2.jks" -storepass 1234
+
+keytool -importcert -alias dgi-test-cert -file D:\Java\Proyectos\servicioEFactura\certumca-ctncasha2.pem -keystore "D:\Java\Proyectos\servicioEFactura\keystore2.jks" -storepass 1234
+
+keytool -importcert -alias dgi-test-cert -file D:\Java\Proyectos\servicioEFactura\Certum_Global_Services_CA_SHA2.pem -keystore "D:\Java\Proyectos\servicioEFactura\keystore2.jks" -storepass 1234

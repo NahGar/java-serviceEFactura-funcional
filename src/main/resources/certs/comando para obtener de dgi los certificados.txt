@@ -1,0 +1,3 @@
+openssl s_client -showcerts -connect efactura.dgi.gub.uy:6443 | Out-File -Encoding ascii dgi-chain.pem
+
+ejecutado desde powershell, esto genera un archivo en la carpeta actual

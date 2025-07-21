@@ -1,0 +1,1 @@
+openssl s_client -connect efactura.dgi.gub.uy:6443 -showcerts

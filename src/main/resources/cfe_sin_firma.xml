@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CFE xmlns="http://cfe.dgi.gub.uy" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://cfe.dgi.gub.uy CFE_v1.1.xsd">
+    <Encabezado>
+        <IdDoc>
+            <TipoCFE>101</TipoCFE>
+            <Serie>A</Serie>
+            <Nro>12345</Nro>
+            <FchEmis>2023-11-15</FchEmis>
+            <MntBruto>1</MntBruto>
+        </IdDoc>
+        <Emisor>
+            <RUCEmisor>212345670012</RUCEmisor>
+            <RznSocEmisor>EMPRESA DE PRUEBA SA</RznSocEmisor>
+            <NomComercial>TIENDA TEST</NomComercial>
+        </Emisor>
+        <Receptor>
+            <TipoDocRecep>2</TipoDocRecep>
+            <DocRecep>212345670011</DocRecep>
+            <RznSocRecep>CLIENTE GENERICO</RznSocRecep>
+        </Receptor>
+    </Encabezado>
+    <Detalle>
+        <Item>
+            <NroLinDet>1</NroLinDet>
+            <IndFact>1</IndFact>
+            <NomItem>PRODUCTO DE PRUEBA</NomItem>
+            <Cantidad>2</Cantidad>
+            <UniMed>BULTO</UniMed>
+            <PrecioUnitario>100.00</PrecioUnitario>
+            <MontoItem>200.00</MontoItem>
+        </Item>
+    </Detalle>
+    <Totales>
+        <TpoMoneda>UYU</TpoMoneda>
+        <MntNoGrv>200.00</MntNoGrv>
+        <MntNetoIvaTasaMin>0.00</MntNetoIvaTasaMin>
+        <MntNetoIVATasaBasica>200.00</MntNetoIVATasaBasica>
+        <IVA>Tasa básica (22%)</IVA>
+        <MntIVATasaMin>0.00</MntIVATasaMin>
+        <MntIVATasaBasica>44.00</MntIVATasaBasica>
+        <MntTotal>244.00</MntTotal>
+    </Totales>
+</CFE>
