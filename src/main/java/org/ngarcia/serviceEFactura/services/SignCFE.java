@@ -37,9 +37,9 @@ public class SignCFE {
 
       try {
          // 1) Declarar namespace WSU y asignar wsu:Id único
-         String id = "CFE-" + UUID.randomUUID();
-         cfeElement.setAttributeNS(Constants.NamespaceSpecNS, "xmlns:wsu", WSU_NS);
-         cfeElement.setAttributeNS(WSU_NS, "wsu:Id", id);
+         //String id = "CFE-" + UUID.randomUUID();
+         //cfeElement.setAttributeNS(Constants.NamespaceSpecNS, "xmlns:wsu", WSU_NS);
+         //cfeElement.setAttributeNS(WSU_NS, "wsu:Id", id);
 
          // 2) Obtener clave privada
          PrivateKey privateKey = (PrivateKey) ks.getKey(alias, "Prueba.0".toCharArray());
@@ -53,7 +53,8 @@ public class SignCFE {
          transforms.addTransform(Transforms.TRANSFORM_ENVELOPED_SIGNATURE);
 
          // 5) Añadir referencia: URI="#id" con SHA-256
-         sig.addDocument("#" + id, transforms, "http://www.w3.org/2001/04/xmlenc#sha256");
+         //sig.addDocument("#" + id, transforms, "http://www.w3.org/2001/04/xmlenc#sha256");
+         sig.addDocument("", transforms, "http://www.w3.org/2001/04/xmlenc#sha256");
 
          // 6) Construir KeyInfo con certificado
          KeyInfo ki = sig.getKeyInfo();
@@ -82,6 +83,7 @@ public class SignCFE {
 
          // 8) Firmar
          sig.sign(privateKey);
+
 
          // --- depuración: imprimir la firma en consola ---
          //TransformerFactory tf = TransformerFactory.newInstance();
