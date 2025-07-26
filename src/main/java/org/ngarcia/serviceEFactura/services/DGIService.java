@@ -9,6 +9,7 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
 import jakarta.enterprise.context.ApplicationScoped;
+import org.ngarcia.serviceEFactura.config.AppConfig;
 import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 
@@ -29,15 +30,10 @@ public class DGIService {
     }
 
     public String signAndSendToDGI(String unsignedXml) throws Exception {
-        // Configuración SSL y TLS (mantener tu configuración actual)
-        //System.setProperty("javax.net.ssl.keyStore", KEYSTORE_PATH);
-        //System.setProperty("javax.net.ssl.keyStorePassword", KEYSTORE_PASS);
-        //System.setProperty("javax.net.ssl.keyStoreType", "PKCS12");
-        //System.setProperty("https.protocols", "TLSv1.2");
 
-        //System.setProperty("javax.net.ssl.trustStore",TRUSTSTORE_PATH);
-        //System.setProperty("javax.net.ssl.trustStorePassword",TRUSTSTORE_PASS);
-        //System.setProperty("javax.net.ssl.trustStoreType","JKS");
+        // Obtener configuración
+        String KEYSTORE_NAME = AppConfig.getKeystorePath();
+        String KEYSTORE_PASS = AppConfig.getKeystorePassword();
 
         // Cargar KeyStore
         //InputStream keystoreStream = getClass().getClassLoader().getResourceAsStream(KEYSTORE_NAME);

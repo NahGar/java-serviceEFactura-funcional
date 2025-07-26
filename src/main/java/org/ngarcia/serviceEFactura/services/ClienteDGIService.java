@@ -2,6 +2,7 @@ package org.ngarcia.serviceEFactura.services;
 
 import jakarta.xml.ws.BindingProvider;
 import jakarta.xml.ws.handler.Handler;
+import org.ngarcia.serviceEFactura.config.AppConfig;
 import uy.gub.dgi.cfe.*;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -39,7 +40,8 @@ public class ClienteDGIService {
          // Crear la cadena de manejadores y agregar el WS-Security Header Handler
          List<Handler> handlerChain = new ArrayList<>();
 
-         PrivateKey privateKey = (PrivateKey) ks.getKey(alias, "Prueba.0".toCharArray());
+         String keystorePass = AppConfig.getKeystorePassword();
+         PrivateKey privateKey = (PrivateKey) ks.getKey(alias, keystorePass.toCharArray());
          handlerChain.add(new WSSecurityHeaderSOAPHandler(cert, privateKey));
          handlerChain.add(new FileLoggingSOAPHandler());
          //no mover logging porque deja loguear

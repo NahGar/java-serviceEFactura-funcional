@@ -4,6 +4,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Priority;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
+import org.ngarcia.serviceEFactura.config.AppConfig;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -16,14 +17,20 @@ import java.security.SecureRandom;
 @Singleton
 @Priority(1)
 public class SSLBootstrap {
-   private static final String KEYSTORE_PATH = "certs/certprueba-Prueba.0.pfx";
-   private static final String TRUSTSTORE_PATH = "certs/truststore.jks"; // Ruta relativa al classpath
-   private static final String KEYSTORE_PASS = "Prueba.0";
-   private static final String TRUSTSTORE_PASS = "123456";
+   //private static final String KEYSTORE_PATH = "certs/certprueba-Prueba.0.pfx";
+   //private static final String TRUSTSTORE_PATH = "certs/truststore.jks"; // Ruta relativa al classpath
+   //private static final String KEYSTORE_PASS = "Prueba.0";
+   //private static final String TRUSTSTORE_PASS = "123456";
 
    @PostConstruct
    public void initDefaultSSLContext() {
       try {
+         // Usar AppConfig
+         String KEYSTORE_PATH = AppConfig.getKeystorePath();
+         String TRUSTSTORE_PATH = AppConfig.getTruststorePath();
+         String KEYSTORE_PASS = AppConfig.getKeystorePassword();
+         String TRUSTSTORE_PASS = AppConfig.getTruststorePassword();
+
          // Cargar keystore
          InputStream keystoreStream = getClass().getClassLoader().getResourceAsStream(KEYSTORE_PATH);
          KeyStore keyStore = KeyStore.getInstance("PKCS12");

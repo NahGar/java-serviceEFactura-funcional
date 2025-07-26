@@ -8,6 +8,7 @@ import org.apache.xml.security.transforms.Transform;
 import org.apache.xml.security.transforms.Transforms;
 import org.apache.xml.security.utils.Constants;
 import org.apache.xml.security.utils.ElementProxy;
+import org.ngarcia.serviceEFactura.config.AppConfig;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -41,8 +42,9 @@ public class SignCFE {
          //cfeElement.setAttributeNS(Constants.NamespaceSpecNS, "xmlns:wsu", WSU_NS);
          //cfeElement.setAttributeNS(WSU_NS, "wsu:Id", id);
 
-         // 2) Obtener clave privada
-         PrivateKey privateKey = (PrivateKey) ks.getKey(alias, "Prueba.0".toCharArray());
+         // 2) Obtener contraseña desde configuración
+         String keystorePass = AppConfig.getKeystorePassword();
+         PrivateKey privateKey = (PrivateKey) ks.getKey(alias, keystorePass.toCharArray());
 
          // 3) Crear XMLSignature con RSA-SHA256 y c14n exclusiva
          XMLSignature sig = new XMLSignature(cfeElement.getOwnerDocument(),"",
