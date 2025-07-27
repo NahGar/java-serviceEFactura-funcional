@@ -15,7 +15,7 @@ public class DgiRestService {
 
     @POST
     @Path("/enviar-cfe")
-    public Response enviarCFE(CFERequest request) { // Usamos un DTO para la entrada
+    public Response enviarCFE(XmlRequest request) { // Usamos un DTO para la entrada
         try {
             String signedXML = dgiService.signAndSendToDGI(request.getUnsignedXml());
             return Response.ok()
@@ -28,8 +28,24 @@ public class DgiRestService {
         }
     }
 
+    // DgiRestService.java - Agregar este método
+    @POST
+    @Path("/enviar-reporte")
+    public Response enviarReporte(XmlRequest request) {
+        try {
+            String signedXML = dgiService.signAndSendReportToDGI(request.getUnsignedXml());
+            return Response.ok()
+                    .entity(new DgiResponse("success", signedXML))
+                    .build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(new DgiResponse("error", e.getMessage()))
+                    .build();
+        }
+    }
+
     // DTO para entrada
-    public static class CFERequest {
+    public static class XmlRequest {
         private String unsignedXml;
 
         public String getUnsignedXml() {

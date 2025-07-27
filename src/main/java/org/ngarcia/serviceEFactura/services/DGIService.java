@@ -62,7 +62,7 @@ public class DGIService {
         NodeList cfeNodes = doc.getElementsByTagNameNS(cfeNS, "CFE");
         for (int i = 0; i < cfeNodes.getLength(); i++) {
             Element cfe = (Element) cfeNodes.item(i);
-            SignCFE.sign(cfe, ks, cert, alias);
+            SignXML.sign(cfe, ks, cert, alias);
         }
 
         // Convertir Document a String
@@ -71,6 +71,52 @@ public class DGIService {
 
         // Enviar el XML firmado
         return ClienteDGIService.enviarCFE(signedXml, ks, alias, cert);
+    }
+
+    // DGIService.java - Agregar este método
+    public String signAndSendReportToDGI(String unsignedXml) throws Exception {
+
+        // Obtener configuración (mismo proceso que para CFE)
+        String KEYSTORE_NAME = AppConfig.getKeystorePath();
+        String KEYSTORE_PASS = AppConfig.getKeystorePassword();
+
+        // Cargar KeyStore (mismo proceso que para CFE)
+        InputStream keystoreStream = getClass().getResourceAsStream("/" + KEYSTORE_NAME);
+        if (keystoreStream == null) {
+            throw new FileNotFoundException("Certificado no encontrado: " + KEYSTORE_NAME);
+        }
+        KeyStore ks = KeyStore.getInstance("PKCS12");
+        ks.load(keystoreStream, KEYSTORE_PASS.toCharArray());
+        keystoreStream.close();
+
+        String alias = "";
+        Enumeration<String> aliases = ks.aliases();
+        if (aliases.hasMoreElements()) {
+            alias = aliases.nextElement();
+        }
+
+        // Obtener certificado
+        X509Certificate cert = (X509Certificate) ks.getCertificate(alias);
+
+        // Parsear XML
+        Document doc = parseXml(unsignedXml);
+
+        // Firmar el elemento <reporte>
+        String reporteNS = "http://cfe.dgi.gub.uy";
+        NodeList reporteNodes = doc.getElementsByTagNameNS(reporteNS, "Reporte");
+        if (reporteNodes.getLength() > 0) {
+            Element reporte = (Element) reporteNodes.item(0);
+            SignXML.sign(reporte, ks, cert, alias);
+        } else {
+            throw new DOMException(DOMException.NOT_FOUND_ERR, "Elemento <Reporte> no encontrado");
+        }
+
+        // Convertir a String XML
+        String signedXml = documentToString(doc);
+        System.out.println("signedXml"+signedXml);
+
+        // Enviar usando el nuevo método para reportes
+        return ClienteDGIService.enviarReporte(signedXml, ks, alias, cert);
     }
 
     private Document parseXml(String xml) throws Exception {

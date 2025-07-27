@@ -4,7 +4,6 @@ import org.apache.xml.security.Init;
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.keys.KeyInfo;
 import org.apache.xml.security.signature.XMLSignature;
-import org.apache.xml.security.transforms.Transform;
 import org.apache.xml.security.transforms.Transforms;
 import org.apache.xml.security.utils.Constants;
 import org.apache.xml.security.utils.ElementProxy;
@@ -12,13 +11,17 @@ import org.ngarcia.serviceEFactura.config.AppConfig;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import javax.xml.crypto.dsig.dom.DOMSignContext;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.StringWriter;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
-import java.util.UUID;
 
-public class SignCFE {
+public class SignXML {
 
    // URI oficial de WSU-Utility
    private static final String WSU_NS =
@@ -34,7 +37,7 @@ public class SignCFE {
        }
    }
 
-   public static void sign(Element cfeElement, KeyStore ks, X509Certificate cert, String alias) {
+   public static void sign(Element elementToSign, KeyStore ks, X509Certificate cert, String alias) {
 
       try {
          // 1) Declarar namespace WSU y asignar wsu:Id único
@@ -47,11 +50,11 @@ public class SignCFE {
          PrivateKey privateKey = (PrivateKey) ks.getKey(alias, keystorePass.toCharArray());
 
          // 3) Crear XMLSignature con RSA-SHA256 y c14n exclusiva
-         XMLSignature sig = new XMLSignature(cfeElement.getOwnerDocument(),"",
+         XMLSignature sig = new XMLSignature(elementToSign.getOwnerDocument(),"",
                  XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA256, Transforms.TRANSFORM_C14N_EXCL_OMIT_COMMENTS);
 
          // 4) Transforms: primero enveloped, luego c14n (con o sin comentarios)
-         Transforms transforms = new Transforms(cfeElement.getOwnerDocument());
+         Transforms transforms = new Transforms(elementToSign.getOwnerDocument());
          transforms.addTransform(Transforms.TRANSFORM_ENVELOPED_SIGNATURE);
 
          // 5) Añadir referencia: URI="#id" con SHA-256
@@ -60,32 +63,36 @@ public class SignCFE {
 
          // 6) Construir KeyInfo con certificado
          KeyInfo ki = sig.getKeyInfo();
-         if (ki == null) ki = new KeyInfo(cfeElement.getOwnerDocument());
+         if (ki == null) ki = new KeyInfo(elementToSign.getOwnerDocument());
 
          // añadir clave pública
          ki.addKeyValue(cert.getPublicKey());
          // añadir datos X509
          org.apache.xml.security.keys.content.X509Data x509Data =
-                 new org.apache.xml.security.keys.content.X509Data(cfeElement.getOwnerDocument());
+                 new org.apache.xml.security.keys.content.X509Data(elementToSign.getOwnerDocument());
          x509Data.addCertificate(cert);
          ki.add(x509Data);
 
-         // 7) Insertar el elemento <ds:Signature> como primer hijo de <CFE>
-         /*Node firstChild = cfeElement.getFirstChild();
-         if (firstChild != null) {
-            cfeElement.insertBefore(sig.getElement(), firstChild);
+         System.out.println("ABC"+elementToSign.getParentNode().getNodeType());
+         // 7) Insertar la firma
+         if (elementToSign.getParentNode().getNodeType() == Node.DOCUMENT_NODE) {
+
+            // Elemento raíz: insertar firma como primer hijo
+            Node firstChild = elementToSign.getFirstChild();
+            if (firstChild != null) {
+               elementToSign.insertBefore(sig.getElement(), firstChild);
+            } else {
+               elementToSign.appendChild(sig.getElement());
+            }
          } else {
-            cfeElement.appendChild(sig.getElement());
-         }*/
-         // 7) Insertar la firma como hermano siguiente de <CFE>
-         Node parent = cfeElement.getParentNode();
-         Node next = cfeElement.getNextSibling();
-         // si no hay hermano siguiente, insertBefore con null lo añade al final
-         parent.insertBefore(sig.getElement(), next);
+            // Elemento no raíz: insertar como hermano siguiente
+            Node parent = elementToSign.getParentNode();
+            Node next = elementToSign.getNextSibling();
+            parent.insertBefore(sig.getElement(), next);
+         }
 
          // 8) Firmar
          sig.sign(privateKey);
-
 
          // --- depuración: imprimir la firma en consola ---
          //TransformerFactory tf = TransformerFactory.newInstance();
@@ -96,7 +103,7 @@ public class SignCFE {
          //System.out.println(">>> ELEMENTO Signature:\n" + sw.toString());
 
       } catch (Exception e) {
-         System.out.println("Error en SingCFE: " + e.getMessage());;
+         System.out.println("Error en SingXML: " + e.getMessage());;
       }
    }
 }
